@@ -1,10 +1,12 @@
-import express from "express";
+import express, { Router, Request, Response, NextFunction } from "express";
 import asyncHandler from "express-async-handler";
 import TestServicePort from "../core/_TestServicePort";
 
-export default class TestRestController{
+export default class TestRestController {
+    private _testService: TestServicePort;
+    private _router: Router;
 
-    constructor(testServiceImplementation = new TestServicePort()){
+    constructor(testServiceImplementation: TestServicePort) {
         this._testService = testServiceImplementation;
         this._router = express.Router();
 
@@ -23,11 +25,11 @@ export default class TestRestController{
         /**
          * Simple error-handling that always just sends the error message with code 500
          */
-        this.router.use('/', (error, req, res, next) => {
+        this.router.use('/', (error: Error, req: Request, res: Response, next: NextFunction) => {
             if (error) {
                 res.status(500).send(error.message);
             } else {
-              next();
+                next();
             }
         });
     }
