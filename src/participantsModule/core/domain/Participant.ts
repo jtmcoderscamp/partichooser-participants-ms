@@ -28,7 +28,7 @@ export default class Participant {
         this.mentorPreferences = mentorPreferences;
     }
 
-    static clone(base: Participant): Participant {
+    static fromObject(base: Participant): Participant {
         return new Participant(
             base.uuid,
             base.name,
