@@ -7,6 +7,7 @@ export default class Participant {
     qualifyingPoints: number;
     description: string[];
     mentorPreferences: string;
+    groupUuid?: string;
 
     constructor(
         uuid: string | undefined,
@@ -16,7 +17,8 @@ export default class Participant {
         email: string,
         qualifyingPoints: number,
         description: string[],
-        mentorPreferences: string
+        mentorPreferences: string,
+        groupUuid?: string
     ) {
         this.uuid = uuid;
         this.name = name;
@@ -26,6 +28,7 @@ export default class Participant {
         this.qualifyingPoints = qualifyingPoints;
         this.description = [...description];
         this.mentorPreferences = mentorPreferences;
+        this.groupUuid = groupUuid;
     }
 
     static fromObject(base: Participant): Participant {
@@ -37,7 +40,8 @@ export default class Participant {
             base.email,
             base.qualifyingPoints,
             base.description,
-            base.mentorPreferences
+            base.mentorPreferences,
+            base.groupUuid
         );
     }
 }
