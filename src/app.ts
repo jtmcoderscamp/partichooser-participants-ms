@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 import TestRestController from "./testModule/interface/TestRestController";
 import MockTestRepository from "./testModule/infrastructure/MockTestRepository";
 import TestService from "./testModule/core/TestService";
@@ -14,8 +15,22 @@ const testServiceImplementation = new TestService(testRepositoryImplementation);
 const testApi = new TestRestController(testServiceImplementation);
 
 //wiring up the routes
-app.use("/tests",testApi.router);
+app.use("/tests", testApi.router);
+
+dotenv.config();
+
+if (!process.env.DB_URI) {
+  throw new Error("DB is needed!!!");
+}
+
+mongoose
+  .connect(process.env.DB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => console.log("db connected"))
+  .catch((err: any) => console.error("ERR", err));
 
 app.listen(PORT, () => {
-	console.log(`Listening on port ${PORT}...`);
+  console.log(`Listening on port ${PORT}...`);
 });
