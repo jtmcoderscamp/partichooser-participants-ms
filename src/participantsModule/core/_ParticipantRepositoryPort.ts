@@ -1,6 +1,6 @@
 import Participant from "./domain/Participant";
 
-export default interface ParticipantServicePort{
+export default interface ParticipantRepositoryPort{
     selectByUuid(uuid: string): Participant;
     selectByGroup(groupUuid: string): Participant[];
     selectByCity(cityName: string): Participant[];
