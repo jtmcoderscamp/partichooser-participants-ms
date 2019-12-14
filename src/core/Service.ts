@@ -1,5 +1,5 @@
 import ServicePort from "./_ServicePort";
-import RepositoryPort from "./_RepositoryPort";
+import RepositoryPort from "./_ParticipantRepositoryPort";
 
 export default class Service implements ServicePort {
     private _repository: RepositoryPort;

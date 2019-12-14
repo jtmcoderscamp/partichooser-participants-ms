@@ -1,7 +1,7 @@
-import TestRepositoryPort from "../testModule/core/_TestRepositoryPort";
+import RepositoryPort from "../core/_ParticipantRepositoryPort";
 import ParticipantResult from "../core/domain/ParticipantResult";
 
-export default class MockTestRepository implements TestRepositoryPort {
+export default class ParticipantsTestRepository implements RepositoryPort {
     private _testResultsInDatabase: { [key: string]: String} = {
         participant1: "P1 test's result",
         participant2: "P2 test's result",
