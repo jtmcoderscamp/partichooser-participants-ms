@@ -1,12 +1,12 @@
 import Participant from "./domain/Participant";
 
 export default interface ParticipantRepositoryPort{
-    selectByUuid(uuid: string): Participant;
-    selectByGroup(groupUuid: string): Participant[];
-    selectByCity(cityName: string): Participant[];
+    selectByUuid(uuid: string): Promise<Participant>;
+    selectByGroup(groupUuid: string): Promise<Participant[]>;
+    selectByCity(cityName: string): Promise<Participant[]>;
 
-    insertOne(participant: Participant): Participant;
-    insertMany(participants: Participant[]): number;
+    insertOne(participant: Participant): Promise<Participant>;
+    insertMany(participants: Participant[]): Promise<number>;
 
     /**
      * Sets participant's group to specified value
@@ -15,12 +15,12 @@ export default interface ParticipantRepositoryPort{
      * @param force - flag deciding whether the group can be overwritten
      * @returns participant's data after the operation
      */
-    setGroup(uuid: string, groupUuid: string, force?: boolean): Participant;
+    setGroup(uuid: string, groupUuid: string, force?: boolean): Promise<Participant>;
 
     /**
      * Removes participant's group association (if any)
      * @param uuid - UUID specifying target participant
      * @returns participant's data after the operation
      */
-    unsetGroup(uuid: string): Participant;
+    unsetGroup(uuid: string): Promise<Participant>;
 }
