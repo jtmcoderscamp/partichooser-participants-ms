@@ -19,7 +19,7 @@ const groupSchemaDefinition = {
     ]
 }
 
-const groupSchema = new Schema(groupSchemaDefinition,{strict: false});
+const groupSchema = new Schema(groupSchemaDefinition,{strict: true});
 
 const GroupDocumentModel = mongoose.model<GroupDocument>("Group",groupSchema);
 
