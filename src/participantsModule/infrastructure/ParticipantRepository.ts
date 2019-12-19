@@ -6,20 +6,20 @@ export default class ParticipantRepository implements ParticipantRepositoryPort 
     constructor() {
     }
 
-    selectByUuid(uuid: string): Participant {
+    async selectByUuid(uuid: string): Promise<Participant> {
         throw new Error("Method not implemented.");
     }
-    selectByGroup(groupUuid: string): Participant[] {
+    async selectByGroup(groupUuid: string): Promise<Participant[]> {
         throw new Error("Method not implemented.");
     }
-    selectByCity(cityName: string): Participant[] {
+    async selectByCity(cityName: string): Promise<Participant[]> {
         throw new Error("Method not implemented.");
     }
 
-    insertOne(participant: Participant): Participant {
+    async insertOne(participant: Participant): Promise<Participant> {
         throw new Error("Method not implemented.");
     }
-    insertMany(participants: Participant[]): number {
+    async insertMany(participants: Participant[]): Promise<number> {
         throw new Error("Method not implemented.");
     }
 
@@ -30,7 +30,7 @@ export default class ParticipantRepository implements ParticipantRepositoryPort 
      * @param force - flag deciding whether the group can be overwritten
      * @returns participant's data after the operation
      */
-    setGroup(uuid: string, groupUuid: string, force?: boolean | undefined): Participant {
+    async setGroup(uuid: string, groupUuid: string, force?: boolean | undefined): Promise<Participant> {
         throw new Error("Method not implemented.");
     }
 
@@ -39,7 +39,7 @@ export default class ParticipantRepository implements ParticipantRepositoryPort 
      * @param uuid - UUID specifying target participant
      * @returns participant's data after the operation
      */
-    unsetGroup(uuid: string): Participant {
+    async unsetGroup(uuid: string): Promise<Participant> {
         throw new Error("Method not implemented.");
     }
 }

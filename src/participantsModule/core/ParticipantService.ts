@@ -9,15 +9,15 @@ export default class ParticipantService implements ParticipantServicePort {
         this._participantRepository = participantRepository;
     }
 
-    findParticipantByUuid(uuid: string): Participant {
+    async findParticipantByUuid(uuid: string): Promise<Participant> {
         throw new Error("Method not implemented.");
     }
 
-    findParticipantsByGroup(groupUuid: string): Participant[] {
+    async findParticipantsByGroup(groupUuid: string): Promise<Participant[]> {
         throw new Error("Method not implemented.");
     }
 
-    findParticipantsByCity(cityName: string): Participant[] {
+    async findParticipantsByCity(cityName: string): Promise<Participant[]> {
         throw new Error("Method not implemented.");
     }
 
@@ -26,7 +26,7 @@ export default class ParticipantService implements ParticipantServicePort {
      * @param participant - an object containing new participant's obligatory data
      * @returns - the data of Participant successfully saved into the database
      */
-    addNewParticipant(participant: Participant): Participant {
+    async addNewParticipant(participant: Participant): Promise<Participant> {
         throw new Error("Method not implemented.");
     }
 
@@ -35,7 +35,7 @@ export default class ParticipantService implements ParticipantServicePort {
      * @param participants - an array of objects describing particular participants
      * @returns - number of added participants
      */
-    addNewParticipants(participants: Participant[]): number {
+    async addNewParticipants(participants: Participant[]): Promise<number> {
         throw new Error("Method not implemented.");
     }
 }
