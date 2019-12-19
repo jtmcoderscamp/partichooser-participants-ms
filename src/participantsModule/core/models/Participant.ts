@@ -1,22 +1,24 @@
 import mongoose from "mongoose";
+import Participant from "../domain/Participant";
 
-const ParticipantSchema = new mongoose.Schema(
+const ParticipantSchema: mongoose.Schema<Participant> = new mongoose.Schema(
   {
-    firstName: String,
-    lastName: String,
-    birthDate: String,
-    city: String,
-    email: String,
-    qualifyingPoints: Number,
+    uuid: { type: String },
+    name: { type: String, required: true },
+    surname: { type: String, required: true },
+    city: { type: String, required: true },
+    email: { type: String, required: true },
+    qualifyingPoints: { type: Number, required: true },
     description: [
       {
-        type: String
+        type: String,
+        required: true
       }
     ],
-    mentorPreferences: String,
+    mentorPreferences: { type: String, required: true },
     groupUuid: String
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Participant", ParticipantSchema);
+export default mongoose.model("participant", ParticipantSchema);
