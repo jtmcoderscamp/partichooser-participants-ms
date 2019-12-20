@@ -3,7 +3,7 @@ import Participant from "../domain/Participant";
 
 const ParticipantSchema: mongoose.Schema<Participant> = new mongoose.Schema(
   {
-    uuid: { type: String },
+    uuid: { type: String, unique: true },
     name: { type: String, required: true },
     surname: { type: String, required: true },
     city: { type: String, required: true },

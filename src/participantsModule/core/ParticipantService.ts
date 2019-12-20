@@ -9,15 +9,15 @@ export default class ParticipantService implements ParticipantServicePort {
     this._participantRepository = participantRepository;
   }
 
-  async findParticipantByUuid(uuid: string): Promise<any> {
+  async findParticipantByUuid(uuid: string): Promise<Participant> {
     return await this._participantRepository.selectByUuid(uuid);
   }
 
-  async findParticipantsByGroup(groupUuid: string): Promise<any> {
+  async findParticipantsByGroup(groupUuid: string): Promise<Participant[]> {
     return await this._participantRepository.selectByGroup(groupUuid);
   }
 
-  async findParticipantsByCity(cityName: string): Promise<any> {
+  async findParticipantsByCity(cityName: string): Promise<Participant[]> {
     return await this._participantRepository.selectByCity(cityName);
   }
 
@@ -29,7 +29,7 @@ export default class ParticipantService implements ParticipantServicePort {
     return await this._participantRepository.setGroup(uuid, groupUuid, force);
   }
 
-  async unsetParticipantFromGroup(uuid: string): Promise<any> {
+  async unsetParticipantFromGroup(uuid: string): Promise<Participant> {
     return await this._participantRepository.unsetGroup(uuid);
   }
 
@@ -38,7 +38,7 @@ export default class ParticipantService implements ParticipantServicePort {
    * @param participant - an object containing new participant's obligatory data
    * @returns - the data of Participant successfully saved into the database
    */
-  async addNewParticipant(participant: Participant): Promise<any> {
+  async addNewParticipant(participant: Participant): Promise<Participant> {
     return await this._participantRepository.insertOne(participant);
   }
 

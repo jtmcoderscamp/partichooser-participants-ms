@@ -2,23 +2,52 @@ import ParticipantRepositoryPort from "./_ParticipantRepositoryPort";
 import Participant from "./domain/Participant";
 import ParticipantModel from "./models/Participant";
 
-// Question to mentor => mongoose always return Document type how to handle that it returns
-// participant
+const mapDocumentToParticipant = (
+  document: Record<string, any>
+): Participant => {
+  if (
+    !document._id ||
+    !document.name ||
+    !document.surname ||
+    !document.city ||
+    !document.qualifyingPoints ||
+    !document.description ||
+    !document.mentorPreferences
+  ) {
+    throw new Error(
+      `created participant has missing fields, ${JSON.stringify(document)}`
+    );
+  }
+  return {
+    uuid: document._id,
+    name: document.name,
+    surname: document.surname,
+    city: document.city,
+    email: document.email,
+    qualifyingPoints: document.qualifyingPoints,
+    description: document.description,
+    mentorPreferences: document.mentorPreferences,
+    groupUuid: document.groupUuid
+  };
+};
 
 export default class ParticipantRepository
   implements ParticipantRepositoryPort {
   constructor() {}
 
-  async selectByUuid(uuid: string): Promise<any> {
-    return await ParticipantModel.find({ uuid });
+  async selectByUuid(uuid: string): Promise<Participant> {
+    const result = await ParticipantModel.find({ uuid });
+    return mapDocumentToParticipant(result);
   }
 
-  async selectByGroup(groupUuid: string): Promise<any> {
-    return await ParticipantModel.find({ groupUuid });
+  async selectByGroup(groupUuid: string): Promise<Participant[]> {
+    const result = await ParticipantModel.find({ groupUuid });
+    return result.map(mapDocumentToParticipant);
   }
 
-  async selectByCity(cityName: string): Promise<any> {
-    return await ParticipantModel.find({ city: cityName });
+  async selectByCity(cityName: string): Promise<Participant[]> {
+    const result = await ParticipantModel.find({ city: cityName });
+    return result.map(mapDocumentToParticipant);
   }
 
   /**
@@ -26,10 +55,10 @@ export default class ParticipantRepository
    * @param participant - an object containing new participant's obligatory data
    * @returns - the data of Participant successfully saved into the database
    */
-  async insertOne(participant: Participant): Promise<any> {
+  async insertOne(participant: Participant): Promise<Participant> {
     return await ParticipantModel.findOne({
       email: participant.email
-    }).then(async existingParticipant => {
+    }).then(async (existingParticipant) => {
       if (existingParticipant) {
         throw new Error(
           `Participant with email: ${participant.email} already exists`
@@ -44,7 +73,8 @@ export default class ParticipantRepository
           description: participant.description,
           mentorPreferences: participant.mentorPreferences
         });
-        return await newParticipant.save();
+        const result = await newParticipant.save();
+        return mapDocumentToParticipant(result);
       }
     });
   }
@@ -59,7 +89,7 @@ export default class ParticipantRepository
     for (const participant of participants) {
       await ParticipantModel.findOne({
         email: participant.email
-      }).then(async existingParticipant => {
+      }).then(async (existingParticipant) => {
         if (existingParticipant) {
           throw new Error(
             `Participant with email: ${participant.email} already exists`
@@ -94,7 +124,21 @@ export default class ParticipantRepository
     groupUuid: string,
     force?: boolean
   ): Promise<Participant> {
-    throw new Error("Method not implemented.");
+    return await ParticipantModel.findOne({
+      _id: uuid
+    }).then(async (existingParticipant: any) => {
+      if (!existingParticipant) {
+        throw new Error(`Could not find participant with uuid: ${uuid}`);
+      }
+      if (
+        !existingParticipant.groupUuid ||
+        (existingParticipant.groupUuid && force)
+      ) {
+        existingParticipant.groupUuid = groupUuid;
+      }
+      const result = await existingParticipant.save();
+      return mapDocumentToParticipant(result);
+    });
   }
 
   /**
@@ -102,7 +146,16 @@ export default class ParticipantRepository
    * @param uuid - UUID specifying target participant
    * @returns participant's data after the operation
    */
-  unsetGroup(uuid: string): Promise<Participant> {
-    throw new Error("Method not implemented.");
+  async unsetGroup(uuid: string): Promise<Participant> {
+    return await ParticipantModel.findOne({
+      _id: uuid
+    }).then(async (existingParticipant: any) => {
+      if (!existingParticipant) {
+        throw new Error(`Could not find participant with uuid: ${uuid}`);
+      }
+      existingParticipant.groupUuid = "";
+      const result = await existingParticipant.save();
+      return mapDocumentToParticipant(result);
+    });
   }
 }
