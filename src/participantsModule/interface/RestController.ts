@@ -1,19 +1,15 @@
 import express, { Router, Request, Response, NextFunction } from "express";
 import asyncHandler from "express-async-handler";
-import ServicePort from "../core/_ServicePort";
-import dbHandler from "../core/dbHandler";
 import Participant from "../core/domain/Participant";
-import ParticipantsTestRepository from "infrastructure/ParticipantsRepository";
+import ParticipantServicePort from "participantsModule/core/_ParticipantServicePort";
 
 export default class RestController {
-    private _testService: ServicePort;
     private _router: Router;
-    private _dbHandler: dbHandler;
+    private _participantService: ParticipantServicePort;
 
-    constructor(testServiceImplementation: ServicePort) {
-        this._testService = testServiceImplementation;
+    constructor(participantServiceImplementation: ParticipantServicePort) {
+        this._participantService = participantServiceImplementation;
         this._router = express.Router();
-        this._dbHandler = new dbHandler("mongodb://localhost/partichooser");
 
         //use the built-in json middleware to parse json requests
         this.router.use('/', express.json());
@@ -24,39 +20,39 @@ export default class RestController {
 
          //get participant by uuid
         this.router.get('/participants/:participantId', asyncHandler(async (req, res) => {
-            const myResponseBody = await this._dbHandler.findParticipant(req.params.participantId);
+            const myResponseBody = await this._participantService.findParticipantByUuid(req.params.participantId);
             res.status(200).send(myResponseBody);
         }));
 
         //get all participants
         this.router.get('/participants', asyncHandler(async (req, res) => {
-            const myResponseBody = await this._dbHandler.getAllParticipants();
+            const myResponseBody = await this._participantService.findAllParticipants();
             res.status(200).send(myResponseBody);
         }))
        
 
         //add participant to database
         this.router.post('/participants', asyncHandler(async (req, res) => {
-            let x  = new Participant(req.body.uuid, req.body.name, req.body.surename, req.body.city, req.body.email, req.body.  qualifyingPoints, req.body.description, req.body.mentorPreferences, req.body.groupUuid);
-            const myResponseBody = await this._dbHandler.addParticipant(x);
+            let x  = new Participant(req.body.uuid, req.body.name, req.body.surname, req.body.city, req.body.email, req.body.  qualifyingPoints, req.body.description, req.body.mentorPreferences, req.body.groupUuid);
+            const myResponseBody = await this._participantService.addNewParticipant(x);
             res.status(200).send(myResponseBody);
         }))
 
         //update participant's group
         this.router.put('/participants/:participantId', asyncHandler(async (req, res) => {
-            const myResponseBody = await this._dbHandler.udpateGroup(req.params.participantId, req.body.group);
+            const myResponseBody = await this._participantService.addParticipantToGroup(req.params.participantId, req.body.group);
             res.status(200).send(myResponseBody);
         }))
 
         //get group by id
         this.router.get('/groups/:groupId', asyncHandler(async (req, res) => {
-            const myResponseBody = await this._dbHandler.findGroup(req.params.groupId);
+            const myResponseBody = await this._participantService.findParticipantsByGroup(req.params.groupId);
             res.status(200).send(myResponseBody);
         }))
 
         //get participants from city by city name
         this.router.get('/cities/:cityName', asyncHandler(async (req, res) => {
-            const myResponseBody = await this._dbHandler.findCity(req.params.cityName);
+            const myResponseBody = await this._participantService.findParticipantsByCity(req.params.cityName);
             res.status(200).send(myResponseBody);
         }))
 

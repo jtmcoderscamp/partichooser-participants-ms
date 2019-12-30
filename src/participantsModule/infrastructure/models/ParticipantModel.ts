@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Participant from "../domain/Participant";
+import Participant from "../../core/domain/Participant";
 
 const ParticipantSchema: mongoose.Schema<Participant> = new mongoose.Schema(
   {

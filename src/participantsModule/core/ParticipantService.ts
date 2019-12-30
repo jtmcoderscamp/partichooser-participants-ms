@@ -1,12 +1,17 @@
 import ParticipantServicePort from "./_ParticipantServicePort";
 import ParticipantRepositoryPort from "./_ParticipantRepositoryPort";
 import Participant from "./domain/Participant";
+import uuid4 from "uuid/v4";
 
 export default class ParticipantService implements ParticipantServicePort {
   private _participantRepository: ParticipantRepositoryPort;
 
   constructor(participantRepository: ParticipantRepositoryPort) {
     this._participantRepository = participantRepository;
+  }
+
+  async findAllParticipants(): Promise<Participant[]> {
+    return await this._participantRepository.selectAll();
   }
 
   async findParticipantByUuid(uuid: string): Promise<Participant> {
@@ -21,11 +26,7 @@ export default class ParticipantService implements ParticipantServicePort {
     return await this._participantRepository.selectByCity(cityName);
   }
 
-  async setParticipantToGroup(
-    uuid: string,
-    groupUuid: string,
-    force: boolean
-  ): Promise<any> {
+  async addParticipantToGroup( uuid: string, groupUuid: string, force?: boolean ): Promise<Participant> {
     return await this._participantRepository.setGroup(uuid, groupUuid, force);
   }
 
@@ -39,6 +40,8 @@ export default class ParticipantService implements ParticipantServicePort {
    * @returns - the data of Participant successfully saved into the database
    */
   async addNewParticipant(participant: Participant): Promise<Participant> {
+    participant.uuid = uuid4();
+    console.log(participant);
     return await this._participantRepository.insertOne(participant);
   }
 
