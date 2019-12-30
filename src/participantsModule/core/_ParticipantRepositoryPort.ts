@@ -1,6 +1,8 @@
 import Participant from "./domain/Participant";
 
 export default interface ParticipantRepositoryPort{
+    selectAll(): Promise<Participant[]>;
+
     selectByUuid(uuid: string): Promise<Participant>;
     selectByGroup(groupUuid: string): Promise<Participant[]>;
     selectByCity(cityName: string): Promise<Participant[]>;

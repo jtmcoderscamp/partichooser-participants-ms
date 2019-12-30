@@ -1,6 +1,8 @@
 import Participant from "./domain/Participant";
 
 export default interface ParticipantServicePort{
+    findAllParticipants(): Promise<Participant[]>;
+
     findParticipantByUuid(uuid: string): Promise<Participant>;
     findParticipantsByGroup(groupUuid: string): Promise<Participant[]>;
     findParticipantsByCity(cityName: string): Promise<Participant[]>;
@@ -18,4 +20,6 @@ export default interface ParticipantServicePort{
      * @returns - number of added participants
      */
     addNewParticipants(participants: Participant[]): Promise<number>;
+
+    addParticipantToGroup( uuid: string, groupUuid: string, force?: boolean ): Promise<Participant>;
 }
