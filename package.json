@@ -1,6 +1,6 @@
 {
-  "name": "js-back-template",
-  "version": "1.0.0",
+  "name": "partichooser-participants-microservice",
+  "version": "0.1.0",
   "description": "",
   "private": true,
   "type": "module",
@@ -8,7 +8,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-server": "ts-node-dev --respawn --transpileOnly ./src/app.ts",
-    "buildServer": "tsc && node ./dist/app.js"
+    "build": "tsc",
+    "postinstall": "npm run build",
+    "start": "node ./dist/app.js"
   },
   "keywords": [],
   "author": "",
