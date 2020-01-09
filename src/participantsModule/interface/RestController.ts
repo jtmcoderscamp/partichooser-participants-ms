@@ -39,19 +39,27 @@ export default class RestController {
         }))
 
         //update participant's group
-        this.router.put('/participants/:participantId', asyncHandler(async (req, res) => {
-            const myResponseBody = await this._participantService.addParticipantToGroup(req.params.participantId, req.body.group);
+        this.router.patch('/participants/:participantId', asyncHandler(async (req, res) => {
+            const groupUuid = req.body.groupUuid;
+            let myResponseBody: Participant;
+            if(typeof groupUuid === "string"){
+                myResponseBody = await this._participantService.addParticipantToGroup(req.params.participantId, req.body.groupUuid);
+            }
+            else if (groupUuid === null) {
+                myResponseBody = await this._participantService.unsetParticipantFromGroup(req.params.participantId);
+            }
+            else throw new TypeError("Invalid request received.");
             res.status(200).send(myResponseBody);
         }))
 
         //get group by id
-        this.router.get('/groups/:groupId', asyncHandler(async (req, res) => {
+        this.router.get('/groups/:groupId/participants', asyncHandler(async (req, res) => {
             const myResponseBody = await this._participantService.findParticipantsByGroup(req.params.groupId);
             res.status(200).send(myResponseBody);
         }))
 
         //get participants from city by city name
-        this.router.get('/cities/:cityName', asyncHandler(async (req, res) => {
+        this.router.get('/cities/:cityName/participants', asyncHandler(async (req, res) => {
             const myResponseBody = await this._participantService.findParticipantsByCity(req.params.cityName);
             res.status(200).send(myResponseBody);
         }))
