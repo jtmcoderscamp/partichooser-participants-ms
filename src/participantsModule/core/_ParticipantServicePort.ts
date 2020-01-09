@@ -22,4 +22,5 @@ export default interface ParticipantServicePort{
     addNewParticipants(participants: Participant[]): Promise<number>;
 
     addParticipantToGroup( uuid: string, groupUuid: string, force?: boolean ): Promise<Participant>;
+    unsetParticipantFromGroup( uuid: string ): Promise<Participant>;
 }
